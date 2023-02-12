@@ -1,16 +1,30 @@
-FROM nvcr.io/nvidia/l4t-ml:r32.7.1-py3
+FROM nvcr.io/nvidia/l4t-ml:r32.6.1-py3
+#FROM nvcr.io/nvidia/l4t-pytorch:r32.6.1-pth1.8-py3
+
+# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 42D5A192B819C5DA
+
+RUN apt-get update && apt-get install -y python3-tk apt-utils gstreamer1.0-tools gstreamer1.0-alsa \
+  gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+  gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+  gstreamer1.0-libav
+
+# RUN apt-get libavformat-dev libavutil-dev libswscale-dev python3-opencv
+
+RUN pip3 install --upgrade pip
 
 WORKDIR /opt
 
-RUN apt-get update && apt-get install -y python3-tk
+COPY . .
 
-RUN pip3 install tqdm
+RUN pip3 install -r requirements.txt
+
+#RUN pip3 install tqdm Cython matplotlib
 
 RUN apt-get clean
 
 RUN apt-get -y autoremove
 
-COPY . .
+
 
 #RUN pip3 install -r requirements.txt
 
